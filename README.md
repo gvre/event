@@ -8,6 +8,9 @@ The way to listen to an event is to register an event listener.
 
 ```
 dispatcher := event.NewDispatcher()
+// OR var dispatcher event.Dispatcher
+// Note: Make sure to pass a pointer to the dispatcher,
+// instead of copying it, if you need to pass it to a function.
 dispatcher.On("event", func(ev interface{}) bool {
     if e, ok := ev.(*MyAppEvent); ok {
         // handle event

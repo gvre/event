@@ -34,8 +34,14 @@ func (d *Dispatcher) On(name string, fn callback) {
 	name = strings.TrimSuffix(name, "*")
 
 	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	// Initialize the events map, in case the dispatcher was created
+	// using `var dispatcher event.Dispatcher` or `dispatcher := event.Dispatcher{}`
+	if d.events == nil {
+		d.events = make(map[string][]callback)
+	}
 	d.events[name] = append(d.events[name], fn)
-	d.mu.Unlock()
 }
 
 // Dispatch passes the Event data to all listeners that have subscribed
